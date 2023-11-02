@@ -14,7 +14,7 @@ C++ implementation of [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGL
 
 Highlights:
 * Pure C++ implementation forked from [chatglm.cpp](https://github.com/li-plus/chatglm.cpp).
-* Added support for AMD GPU. Find `hipBLAS` in [jump to BLAS](https://github.com/NewJerseyStyle/chatglm.cpp.hip/tree/amdgpu-rocm-support#using-blas).
+* Added support for AMD GPU. Find `hipBLAS` in [jump to BLAS]([https://github.com/NewJerseyStyle/chatglm.cpp.hip#using-blas)).
 
 ## Getting Started
 
