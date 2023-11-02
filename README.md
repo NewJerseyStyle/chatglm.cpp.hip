@@ -1,4 +1,4 @@
-# ChatGLM.cpp
+# ChatGLM.cpp-ROCm
 
 [![CMake](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml)
 [![Python package](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml)
@@ -13,15 +13,8 @@ C++ implementation of [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGL
 ## Features
 
 Highlights:
-* Pure C++ implementation based on [ggml](https://github.com/ggerganov/ggml), working in the same way as [llama.cpp](https://github.com/ggerganov/llama.cpp).
-* Accelerated memory-efficient CPU inference with int4/int8 quantization, optimized KV cache and parallel computing.
-* Streaming generation with typewriter effect.
-* Python binding, web demo, api servers and more possibilities.
-
-Support Matrix:
-* Hardwares: x86/arm CPU, NVIDIA GPU, Apple Silicon GPU
-* Platforms: Linux, MacOS, Windows
-* Models: [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B), [ChatGLM3-6B](https://github.com/THUDM/ChatGLM3), [CodeGeeX2](https://github.com/THUDM/CodeGeeX2), [Baichuan-13B](https://github.com/baichuan-inc/Baichuan-13B), [Baichuan-7B](https://github.com/baichuan-inc/Baichuan-7B), [Baichuan-13B](https://github.com/baichuan-inc/Baichuan-13B), [Baichuan2](https://github.com/baichuan-inc/Baichuan2), [InternLM](https://github.com/InternLM/InternLM)
+* Pure C++ implementation forked from [chatglm.cpp](https://github.com/li-plus/chatglm.cpp).
+* Added support for AMD GPU. Find `hipBLAS` in [jump to BLAS](https://github.com/NewJerseyStyle/chatglm.cpp.hip/tree/amdgpu-rocm-support#using-blas).
 
 ## Getting Started
 
@@ -91,99 +84,7 @@ In interactive mode, your chat history will serve as the context for the next-ro
 Run `./build/bin/main -h` to explore more options!
 
 **Try Other Models**
-
-<details open>
-<summary>ChatGLM2-6B</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i THUDM/chatglm2-6b -t q4_0 -o chatglm2-ggml.bin
-./build/bin/main -m chatglm2-ggml.bin -p 你好 --top_p 0.8 --temp 0.8
-# 你好👋！我是人工智能助手 ChatGLM2-6B，很高兴见到你，欢迎问我任何问题。
-```
-</details>
-
-<details open>
-<summary>ChatGLM3-6B</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i THUDM/chatglm3-6b -t q4_0 -o chatglm3-ggml.bin
-./build/bin/main -m chatglm3-ggml.bin -p 你好 --top_p 0.8 --temp 0.8
-# 你好👋！我是人工智能助手 ChatGLM3-6B，很高兴见到你，欢迎问我任何问题。
-```
-</details>
-
-<details>
-<summary>CodeGeeX2</summary>
-
-```sh
-$ python3 chatglm_cpp/convert.py -i THUDM/codegeex2-6b -t q4_0 -o codegeex2-ggml.bin
-$ ./build/bin/main -m codegeex2-ggml.bin --temp 0 --mode generate -p "\
-# language: Python
-# write a bubble sort function
-"
-
-
-def bubble_sort(list):
-    for i in range(len(list) - 1):
-        for j in range(len(list) - 1):
-            if list[j] > list[j + 1]:
-                list[j], list[j + 1] = list[j + 1], list[j]
-    return list
-
-
-print(bubble_sort([5, 4, 3, 2, 1]))
-```
-</details>
-
-<details>
-<summary>Baichuan-13B-Chat</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i baichuan-inc/Baichuan-13B-Chat -t q4_0 -o baichuan-13b-chat-ggml.bin
-./build/bin/main -m baichuan-13b-chat-ggml.bin -p 你好 --top_k 5 --top_p 0.85 --temp 0.3 --repeat_penalty 1.1
-# 你好！有什么我可以帮助你的吗？
-```
-</details>
-
-<details>
-<summary>Baichuan2-7B-Chat</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i baichuan-inc/Baichuan2-7B-Chat -t q4_0 -o baichuan2-7b-chat-ggml.bin
-./build/bin/main -m baichuan2-7b-chat-ggml.bin -p 你好 --top_k 5 --top_p 0.85 --temp 0.3 --repeat_penalty 1.05
-# 你好！很高兴为您提供帮助。请问有什么问题我可以帮您解答？
-```
-</details>
-
-<details>
-<summary>Baichuan2-13B-Chat</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i baichuan-inc/Baichuan2-13B-Chat -t q4_0 -o baichuan2-13b-chat-ggml.bin
-./build/bin/main -m baichuan2-13b-chat-ggml.bin -p 你好 --top_k 5 --top_p 0.85 --temp 0.3 --repeat_penalty 1.05
-# 你好！今天我能为您提供什么帮助？
-```
-</details>
-
-<details>
-<summary>InternLM-Chat-7B</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i internlm/internlm-chat-7b-v1_1 -t q4_0 -o internlm-chat-7b-ggml.bin
-./build/bin/main -m internlm-chat-7b-ggml.bin -p 你好 --top_p 0.8 --temp 0.8
-# 你好，我是书生·浦语，有什么可以帮助你的吗？
-```
-</details>
-
-<details>
-<summary>InternLM-Chat-20B</summary>
-
-```sh
-python3 chatglm_cpp/convert.py -i internlm/internlm-chat-20b -t q4_0 -o internlm-chat-20b-ggml.bin
-./build/bin/main -m internlm-chat-20b-ggml.bin -p 你好 --top_p 0.8 --temp 0.8
-# 你好！有什么我可以帮到你的吗？
-```
-</details>
+Read about this at [chatglm.cpp](https://github.com/li-plus/chatglm.cpp).
 
 ## Using BLAS
 
@@ -192,6 +93,18 @@ BLAS library can be integrated to further accelerate matrix multiplication. Howe
 **Accelerate Framework**
 
 Accelerate Framework is automatically enabled on macOS. To disable it, add the CMake flag `-DGGML_NO_ACCELERATE=ON`.
+
+**hipBLAS**
+
+hipBLAS uses AMD GPU to accelerate BLAS. Add the CMake flag `-DGGML_HIPBLAS=ON` to enable it.
+
+> ℹ️ According to AMD documentation for ROCm platform container environment 🐳 will bring you the best development experience with ROCm.  
+> More about [ROCm installation](https://rocm.docs.amd.com/en/latest/deploy/linux/quick_start.html)
+
+ROCm HIP compiler must be specified in the `CMake` command. You may check the path of these HIP compatible compilers in your environment. `/opt/rocm/llvm/bin/` is the path for HIP compatible `clang` and `clang++` in the Docker image `rocm/dev-ubuntu-20.04:4.2-complete` (ROCm 4.2).
+```sh
+cmake -B build -DGGML_HIPBLAS=ON -DCMAKE_C_COMPILER=/opt/rocm/llvm/bin/clang -DCMAKE_CXX_COMPILER=/opt/rocm/llvm/bin/clang++ && cmake --build build -j
+```
 
 **OpenBLAS**
 
@@ -221,6 +134,9 @@ cmake -B build -DGGML_METAL=ON && cmake --build build -j
 ```
 
 ## Python Binding
+
+> ⚠️ ChatGLM.cpp-ROCm is not available on PyPI yet.  
+> But you can still install it with `CMAKE_ARGS="-DGGML_HIPBLAS=ON -DCMAKE_C_COMPILER=/opt/rocm/llvm/bin/clang -DCMAKE_CXX_COMPILER=/opt/rocm/llvm/bin/clang++" python3 setup.py install`
 
 The Python binding provides high-level `chat` and `stream_chat` interface similar to the original Hugging Face ChatGLM(2)-6B.
 
