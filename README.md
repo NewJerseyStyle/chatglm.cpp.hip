@@ -1,7 +1,5 @@
 # ChatGLM.cpp-ROCm
 
-> ⚠️ Unstable development repo
-
 [![CMake](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/cmake.yml)
 [![Python package](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml/badge.svg)](https://github.com/li-plus/chatglm.cpp/actions/workflows/python-package.yml)
 [![PyPI](https://img.shields.io/pypi/v/chatglm-cpp)](https://pypi.org/project/chatglm-cpp/)
@@ -15,14 +13,12 @@ C++ implementation of [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGL
 ## Features
 
 Highlights:
-* Pure C++ implementation based on [ggml](https://github.com/ggerganov/ggml), working in the same way as [llama.cpp](https://github.com/ggerganov/llama.cpp).
-* Accelerated memory-efficient CPU inference with int4/int8 quantization, optimized KV cache and parallel computing.
-* Streaming generation with typewriter effect.
-* Python binding, web demo, api servers and more possibilities.
+* Pure C++ implementation forked from [chatglm.cpp](https://github.com/li-plus/chatglm.cpp).
+* Added support for AMD GPU. Find `hipBLAS` in [jump to BLAS](https://github.com/NewJerseyStyle/chatglm.cpp.hip/tree/amdgpu-rocm-support#using-blas).
 
 Support Matrix:
-* Hardwares: x86/arm CPU, NVIDIA GPU, Apple Silicon GPU
-* Platforms: Linux, MacOS, Windows
+* Hardwares: x86/arm CPU, NVIDIA GPU, AMD GPU, Apple Silicon GPU
+* Platforms: Linux, MacOS, Window
 * Models: [ChatGLM-6B](https://github.com/THUDM/ChatGLM-6B), [ChatGLM2-6B](https://github.com/THUDM/ChatGLM2-6B), [ChatGLM3-6B](https://github.com/THUDM/ChatGLM3), [CodeGeeX2](https://github.com/THUDM/CodeGeeX2), [Baichuan-13B](https://github.com/baichuan-inc/Baichuan-13B), [Baichuan-7B](https://github.com/baichuan-inc/Baichuan-7B), [Baichuan-13B](https://github.com/baichuan-inc/Baichuan-13B), [Baichuan2](https://github.com/baichuan-inc/Baichuan2), [InternLM](https://github.com/InternLM/InternLM)
 
 ## Getting Started
@@ -220,6 +216,17 @@ cmake -B build -DGGML_CUBLAS=ON -DCUDA_ARCHITECTURES="70;75"    # compatible wit
 MPS (Metal Performance Shaders) allows computation to run on powerful Apple Silicon GPU. Add the CMake flag `-DGGML_METAL=ON` to enable it.
 ```sh
 cmake -B build -DGGML_METAL=ON && cmake --build build -j
+```
+
+**hipBLAS**
+
+hipBLAS uses AMD GPU to accelerate BLAS. Add the CMake flag `-DGGML_HIPBLAS=ON` to enable it.
+
+> ℹ️ According to AMD documentation for ROCm platform container environment 🐳 will bring you the best development experience with ROCm.
+
+ROCm HIP compiler must be specified in the `CMake` command. You may check the path of these HIP compatible compilers in your environment. `/opt/rocm/llvm/bin/` is the path for HIP compatible `clang` and `clang++` in the Docker image `rocm/dev-ubuntu-20.04:4.2-complete` (ROCm 4.2).
+```sh
+cmake -B build -DGGML_HIPBLAS=ON -DCMAKE_C_COMPILER=/opt/rocm/llvm/bin/clang -DCMAKE_CXX_COMPILER=/opt/rocm/llvm/bin/clang++ && cmake --build build -j
 ```
 
 ## Python Binding
